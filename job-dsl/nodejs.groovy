@@ -13,6 +13,15 @@ job('NodeJS example') {
                          // Manage Jenkins -> Configure Tools -> NodeJS Installations -> Name
     }
     steps {
-        shell("npm install")
+        // I got these methods from https://jenkinsci.github.io/job-dsl-plugin/#method/javaposse.jobdsl.dsl.helpers.step.StepContext.dockerBuildAndPublish
+        dockerBuildAndPublish {
+            repositoryName('carmargut/nodejs-docker-demo')
+            tag('${GIT_REVISION,length=9}')
+            registryCredentials('dockerhub')
+            forcePull(false) 
+            forceTag(false)
+            createFingerprints(false)
+            skipDecorate()
+        }
     }
 }
